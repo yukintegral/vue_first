@@ -1,7 +1,16 @@
 <template>
   <div id="app">
     <Header />
-    <Question />
+
+    <b-container class = "bv-example-row"> 
+      <b-row> 
+        <b-col sm="6" offset="3"></b-col> 
+          <Question />
+      </b-row> 
+    </b-container>
+
+
+
   </div>
 </template>
 
