@@ -5,7 +5,9 @@
     <b-container class = "bv-example-row"> 
       <b-row> 
         <b-col sm="6" offset="3"></b-col> 
+        <!--  問題数の表示 -->
           <QuestionBox 
+          v-if="questions.length"
           :currentQuestion="questions[index]"
           :next="next"
           />
@@ -16,6 +18,8 @@
 
   </div>
 </template>
+
+
 
 <script>
 import Header from './components/Header.vue'
@@ -28,7 +32,7 @@ export default {
     QuestionBox
   },
 
-
+// 問題を返す
   data() {
     return {
       questions: [],
@@ -36,7 +40,7 @@ export default {
     }
   },
 
-  
+    
   methods: {
     next() {
       this.index++
@@ -57,6 +61,9 @@ export default {
   }
 }
 </script>
+
+
+
 
 <style>
 #app {
