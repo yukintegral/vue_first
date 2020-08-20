@@ -31,7 +31,7 @@
 import _ from 'lodash'
 export default {
   props: {
-    currentQuestion: Object,
+    currentQuestion: Object, 
     next: Function
   },
 
@@ -42,7 +42,6 @@ export default {
     }
   },
 
-
   computed: {
     answers() {
       let answers = [...this.currentQuestion.incorrect_answers]
@@ -50,10 +49,14 @@ export default {
       return answers
     }
   },
+
   watch: {
-    currentQuestion() {
-      this.selectedIndex = null
-      this.shuffleAnswers()
+    currentQuestion: {
+      immediate: true,
+      handler() {
+          this.selectedIndex = null
+          this.shuffleAnswers()
+      }
     }
   },
 
