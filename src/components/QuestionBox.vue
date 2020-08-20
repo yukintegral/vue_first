@@ -14,16 +14,22 @@
         :class="[selectedIndex === index ? 'selected' : '' ]"
         >
         {{ answer }}
-          <!-- {{ answer }} -->
-        </b-list-group-item>
+      </b-list-group-item>
     </b-list-group>
 
 
     <!-- 回答の選択肢-->
-    <b-button variant="primary" href="#">Submit</b-button>
-    <b-button @click="next" variant="success" href="#">Next</b-button> 
+    <!-- 洗濯するとsubmitが変わる -->
+    <b-button variant="primary"
+    v-on@click="submitAnswer"
+    :disabled="selectedIndex === null && answered"
+    >
+    Submit
+    </b-button>
+    <b-button variant="success" @click="next">
+    Next
+    </b-button>
   </b-jumbotron>
-
 </div>
 </template>
 
@@ -32,13 +38,16 @@ import _ from 'lodash'
 export default {
   props: {
     currentQuestion: Object, 
-    next: Function
+    next: Function,
+    increment: Function
   },
 
   data() {
     return {
       selectedIndex: null,
-      shuffledAnswers: []
+      correctIndex: null,
+      shuffledAnswers: [],
+      answered: false
     }
   },
 
@@ -55,6 +64,7 @@ export default {
       immediate: true,
       handler() {
           this.selectedIndex = null
+          this.answered = false
           this.shuffleAnswers()
       }
     }
@@ -64,9 +74,21 @@ export default {
     selectAnswer(index){
       this.selectedIndex = index
     },
+    
+    submitAnswer() {
+      let isCorrect = false
+
+        if (this.selectedIndex === this.correctIndex) {
+          isCorrect = true
+        }
+        this.increment(isCorrect)
+    },
+
+
     shuffleAnswers(){
       let answers = [...this.cirremtQuestion.incorrect_answers, this.currect_answer]
-      this.shuffledAnswers = _.shuffle(answers) 
+      this.shuffledAnswers = _.shuffle(answers)
+      this.correctIndex = this.shuffledAnswers.indexOf(this.currentQuestion.correct_answer)
     }
   }
 }

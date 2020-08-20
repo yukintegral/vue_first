@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <Header />
-
+    <Header 
+    :numCorrect="numCorrect"
+    :numTotal="numTotal"
+    />
+ 
     <b-container class = "bv-example-row"> 
       <b-row> 
         <b-col sm="6" offset="3"></b-col> 
@@ -10,6 +13,7 @@
           v-if="questions.length"
           :currentQuestion="questions[index]"
           :next="next"
+          :increment="increment"
           />
       </b-row> 
     </b-container>
@@ -36,7 +40,9 @@ export default {
   data() {
     return {
       questions: [],
-      index: 0
+      index: 0,
+      numCorrect: 0,
+      numTotal: 0
     }
   },
 
@@ -44,6 +50,12 @@ export default {
   methods: {
     next() {
       this.index++
+    },
+    increment(isCorrect) {
+      if (isCorrect) {
+        numCorrect++
+      }
+      this.numTotal++
     }
   },
 
