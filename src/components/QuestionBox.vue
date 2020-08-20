@@ -9,8 +9,12 @@
     <hr class="my-4" />
     <!-- 出題 -->
     <b-list-group>
-        <b-list-group-item v-for="(answer, index) in answers" :key="index">
-          {{ answer }}
+        <b-list-group-item v-for="(answer, index) in answers" :key="index"
+        @click.prevent="selectAnswer(index)"
+        :class="[selectedIndex === index ? 'selected' : '' ]"
+        >
+        {{ answer }}
+          <!-- {{ answer }} -->
         </b-list-group-item>
     </b-list-group>
 
@@ -24,6 +28,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 export default {
   props: {
     currentQuestion: Object,
@@ -32,7 +37,8 @@ export default {
 
   data() {
     return {
-      selectedIndex: null
+      selectedIndex: null,
+      shuffledAnswers: []
     }
   },
 
@@ -44,24 +50,45 @@ export default {
       return answers
     }
   },
+  watch: {
+    currentQuestion() {
+      this.selectedIndex = null
+      this.shuffleAnswers()
+    }
+  },
 
   methods: {
     selectAnswer(index){
       this.selectedIndex = index
-    }  
     },
-
-  mounted(){     
-      console.log(this.currentQuestion)
+    shuffleAnswers(){
+      let answers = [...this.cirremtQuestion.incorrect_answers, this.currect_answer]
+      this.shuffledAnswers = _.shuffle(answers) 
     }
   }
+}
 </script>
 
 <style scoped>
-  .list-group {
-    margin-bottom: 15px;
-  }
-  .btn {
-    margin: 0 5px;
-  }
+.list-group {
+  margin-bottom: 15px;
+}
+
+.list-group-item:hover {
+  background: #EEE;
+  cursor: pointer;
+}
+.btn {
+  margin: 0 5px;
+}
+.selected {
+  background-color: lightblue;
+}
+.correct {
+  background-color: lightgreen;
+}
+.incorrect {
+  background-color: red;
+}
+
 </style>
