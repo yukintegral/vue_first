@@ -7,31 +7,36 @@
     </template>
 
     <hr class="my-4" />
-    <!-- 出題 -->
+    <!-- 問題 -->
     <b-list-group>
-        <b-list-group-item v-for="(answer, index) in answers" :key="index"
+        <b-list-group-item 
+        v-for="(answer, index) in shuffledAnswers"
+        :key="index"
         @click.prevent="selectAnswer(index)"
-        :class="[selectedIndex === index ? 'selected' : '' ]"
+        :class="answerClass(index)"
         >
         {{ answer }}
       </b-list-group-item>
-    </b-list-group>
+    </b-list-group >
 
 
     <!-- 回答の選択肢-->
-    <!-- 洗濯するとsubmitが変わる -->
-    <b-button variant="primary"
-    v-on@click="submitAnswer"
-    :disabled="selectedIndex === null && answered"
+    <!-- 選択するとsubmitが変わる -->
+    <b-button 
+    variant="primary"
+    @click="submitAnswer"
+    :disabled="selectedIndex === null || answered" 
     >
     Submit
     </b-button>
-    <b-button variant="success" @click="next">
+    <b-button @click="next" variant="success">
     Next
     </b-button>
   </b-jumbotron>
 </div>
 </template>
+
+
 
 <script>
 import _ from 'lodash'
@@ -42,7 +47,7 @@ export default {
     increment: Function
   },
 
-  data() {
+  data: function() {
     return {
       selectedIndex: null,
       correctIndex: null,
@@ -74,25 +79,43 @@ export default {
     selectAnswer(index){
       this.selectedIndex = index
     },
-    
+
     submitAnswer() {
       let isCorrect = false
-
         if (this.selectedIndex === this.correctIndex) {
           isCorrect = true
         }
+        this.answered = true
         this.increment(isCorrect)
     },
 
-
     shuffleAnswers(){
-      let answers = [...this.cirremtQuestion.incorrect_answers, this.currect_answer]
+      let answers = [...this.currentQuestion.incorrect_answers, this.currentQuestion.correct_answer]
       this.shuffledAnswers = _.shuffle(answers)
       this.correctIndex = this.shuffledAnswers.indexOf(this.currentQuestion.correct_answer)
+    },
+  
+    answerClass(index) {
+      let answerClass = ''
+      if (!this.answered && this.selectedIndex === index) {
+        answerClass = 'selected'
+      } else if (this.answered && this.correctIndex === index) {
+        answerClass = 'correct'
+      } else if (this.answered &&
+        this.selectedIndex === index &&
+        this.correctIndex !== index
+      ) {
+        answerClass = 'incorrect'
+      }
+      return answerClass
     }
   }
 }
+
 </script>
+
+
+
 
 <style scoped>
 .list-group {
@@ -106,6 +129,8 @@ export default {
 .btn {
   margin: 0 5px;
 }
+
+
 .selected {
   background-color: lightblue;
 }

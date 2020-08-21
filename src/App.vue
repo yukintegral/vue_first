@@ -4,7 +4,7 @@
     :numCorrect="numCorrect"
     :numTotal="numTotal"
     />
- 
+
     <b-container class = "bv-example-row"> 
       <b-row> 
         <b-col sm="6" offset="3"></b-col> 
@@ -53,7 +53,7 @@ export default {
     },
     increment(isCorrect) {
       if (isCorrect) {
-        numCorrect++
+        this.numCorrect++
       }
       this.numTotal++
     }
@@ -61,7 +61,7 @@ export default {
 
 
     mounted: function () {
-      fetch("https://opentdb.com/api.php?amount=2&category=17&type=multiple", {
+      fetch("https://opentdb.com/api.php?amount=10&category=27&type=multiple", {
         method: 'get'
       })
       .then ((response) => {
